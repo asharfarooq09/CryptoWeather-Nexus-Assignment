@@ -18,10 +18,7 @@ export default function HomePage() {
   const { favorites } = useSelector((state) => state.preferences);
   const cryptoData = useSelector((state) => state.crypto.data);
   const { prices } = useSelector((state) => state.crypto);
-  const weatherData = useSelector((state) => state.weather.data);
-
   const weatherLoading = useSelector((state) => state.weather.loading);
-  const cryptoLoading = useSelector((state) => state.crypto.loading);
   const newsLoading = useSelector((state) => state.news.loading);
 
   useEffect(() => {
@@ -47,31 +44,29 @@ export default function HomePage() {
     );
 
     return (
-      <div className="overflow-x-auto overflow-y-hidden hide-scrollbar">
-        <div className="inline-flex gap-8 p-2">
-          {sortedFavorites.map((favorite, index) => {
-            if (favorite.type === "weather") {
-              return (
-                <WeatherCard
-                  key={`weather-${favorite.id}`}
-                  city={favorite.id}
-                />
-              );
-            } else if (favorite.type === "crypto") {
-              const coin = cryptoData.find((c) => c.id === favorite.id);
-              if (!coin) return null;
-              return (
-                <CryptoCard
-                  key={`crypto-${favorite.id}`}
-                  coin={coin}
-                  index={index}
-                  price={prices[coin.id]}
-                />
-              );
-            }
-            return null;
-          })}
-        </div>
+      <div className="flex flex-wrap gap-6 px-2">
+        {sortedFavorites.map((favorite, index) => {
+          if (favorite.type === "weather") {
+            return (
+              <WeatherCard
+                key={`weather-${favorite.id}`}
+                city={favorite.id}
+              />
+            );
+          } else if (favorite.type === "crypto") {
+            const coin = cryptoData.find((c) => c.id === favorite.id);
+            if (!coin) return null;
+            return (
+              <CryptoCard
+                key={`crypto-${favorite.id}`}
+                coin={coin}
+                index={index}
+                price={prices[coin.id]}
+              />
+            );
+          }
+          return null;
+        })}
       </div>
     );
   };
@@ -91,21 +86,17 @@ export default function HomePage() {
             <h2 className="text-2xl font-semibold mb-4 px-2 flex items-center gap-2">
               <span className="text-amber-400">⭐</span> Favorites
             </h2>
-            <div className="relative">{renderFavorites()}</div>
+            {renderFavorites()}
           </section>
 
           <section>
             <h2 className="text-2xl font-semibold mb-4 px-2 flex items-center gap-2">
               <span className="text-blue-400">🌤</span> Weather Updates
             </h2>
-            <div className="relative">
-              <div className="overflow-x-auto overflow-y-hidden hide-scrollbar">
-                <div className="inline-flex gap-8 p-2">
-                  <WeatherCard city="india" />
-                  <WeatherCard city="london" />
-                  <WeatherCard city="tokyo" />
-                </div>
-              </div>
+            <div className="flex flex-wrap justify-center gap-6 px-2">
+              <WeatherCard city="india" />
+              <WeatherCard city="london" />
+              <WeatherCard city="tokyo" />
             </div>
           </section>
 
@@ -130,13 +121,6 @@ export default function HomePage() {
       </div>
 
       <style jsx>{`
-        .hide-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-        .hide-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
         .gradient-text {
           background: linear-gradient(to right, #60a5fa, #f59e0b);
           -webkit-background-clip: text;

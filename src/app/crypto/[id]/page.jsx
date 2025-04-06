@@ -30,12 +30,8 @@ ChartJS.register(
 );
 
 const formatNumber = (num) => {
-  if (num >= 1e9) {
-    return `$${(num / 1e9).toFixed(2)}B`;
-  }
-  if (num >= 1e6) {
-    return `$${(num / 1e6).toFixed(2)}M`;
-  }
+  if (num >= 1e9) return `$${(num / 1e9).toFixed(2)}B`;
+  if (num >= 1e6) return `$${(num / 1e6).toFixed(2)}M`;
   return `$${num.toLocaleString()}`;
 };
 
@@ -103,52 +99,42 @@ export default function CryptoDetailPage() {
   const chartOptions = {
     responsive: true,
     plugins: {
-      legend: {
-        display: false,
-      },
-      tooltip: {
-        mode: "index",
-        intersect: false,
-      },
+      legend: { display: false },
+      tooltip: { mode: "index", intersect: false },
     },
     scales: {
       y: {
-        grid: {
-          color: "rgba(255, 255, 255, 0.1)",
-        },
+        grid: { color: "rgba(255, 255, 255, 0.1)" },
         ticks: {
           color: "#fff",
           callback: (value) => "$" + value.toLocaleString(),
         },
       },
       x: {
-        grid: {
-          color: "rgba(255, 255, 255, 0.1)",
-        },
-        ticks: {
-          color: "#fff",
-        },
+        grid: { color: "rgba(255, 255, 255, 0.1)" },
+        ticks: { color: "#fff" },
       },
     },
-    interaction: {
-      intersect: false,
-    },
+    interaction: { intersect: false },
   };
 
   return (
-    <div className="min-h-screen bg-[#0f1123] text-white px-4 py-8">
+    <div className="min-h-screen bg-[#0f1123] text-white px-4 py-6 md:py-8">
       <div className="max-w-[1920px] mx-auto">
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8">
+        {/* Top Info Section */}
+        <div className="flex flex-col gap-6 sm:flex-row sm:justify-between sm:items-center mb-8">
           <div className="flex items-center gap-4">
-            <div className="w-20 h-20 flex items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 text-5xl">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 text-4xl sm:text-5xl">
               {getCryptoIcon(data.symbol.toUpperCase())}
             </div>
             <div>
               <div className="flex items-center gap-3">
-                <h1 className="text-4xl font-bold text-white">{data.name}</h1>
+                <h1 className="text-2xl sm:text-4xl font-bold">
+                  {data.name}
+                </h1>
                 <button
                   onClick={() => toggleCrypto(id)}
-                  className="text-3xl transition-all duration-300 hover:scale-110 focus:outline-none"
+                  className="text-2xl sm:text-3xl transition-all duration-300 hover:scale-110 focus:outline-none"
                 >
                   {isCryptoFavorite(id) ? (
                     <span className="text-yellow-400">★</span>
@@ -159,22 +145,23 @@ export default function CryptoDetailPage() {
                   )}
                 </button>
               </div>
-              <div className="flex items-center gap-2 mt-2">
-                <span className="text-sm font-medium text-gray-400 bg-white/5 px-2 py-1 rounded-md">
+              <div className="flex flex-wrap items-center gap-2 mt-2">
+                <span className="text-xs sm:text-sm font-medium text-gray-400 bg-white/5 px-2 py-1 rounded-md">
                   {data.symbol.toUpperCase()}
                 </span>
-                <span className="text-sm font-medium text-purple-400 bg-purple-400/10 px-2 py-1 rounded-md">
+                <span className="text-xs sm:text-sm font-medium text-purple-400 bg-purple-400/10 px-2 py-1 rounded-md">
                   Rank #{data.market_cap_rank}
                 </span>
               </div>
             </div>
           </div>
-          <div className="flex flex-col items-end">
-            <div className="text-4xl font-bold">
+
+          <div className="flex flex-col items-start sm:items-end">
+            <div className="text-2xl sm:text-4xl font-bold">
               ${data.market_data.current_price.usd.toLocaleString()}
             </div>
             <div
-              className={`text-lg font-semibold ${
+              className={`text-base sm:text-lg font-semibold ${
                 data.market_data.price_change_percentage_24h >= 0
                   ? "text-green-400"
                   : "text-red-400"
@@ -189,10 +176,12 @@ export default function CryptoDetailPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 bg-[#1a1c35] rounded-3xl p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-semibold">Price Chart</h3>
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+          {/* Chart */}
+          <div className="lg:col-span-2 bg-[#1a1c35] rounded-3xl p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
+              <h3 className="text-lg sm:text-xl font-semibold">Price Chart</h3>
               <div className="flex gap-2">
                 <button className="px-3 py-1 rounded-lg bg-blue-500/20 text-blue-400 text-sm">
                   7D
@@ -205,50 +194,53 @@ export default function CryptoDetailPage() {
                 </button>
               </div>
             </div>
-            <div className="h-[300px]">
+            <div className="h-[250px] sm:h-[300px]">
               <Line data={priceHistory} options={chartOptions} />
             </div>
           </div>
 
-          <div className="bg-[#1a1c35] rounded-3xl p-6">
-            <h3 className="text-xl font-semibold mb-4">Market Stats</h3>
-            <div className="space-y-6">
-              <table className="w-full">
+          {/* Market Stats */}
+          <div className="bg-[#1a1c35] rounded-3xl p-4 sm:p-6">
+            <h3 className="text-lg sm:text-xl font-semibold mb-4">
+              Market Stats
+            </h3>
+            <div className="space-y-4">
+              <table className="w-full text-sm sm:text-base">
                 <tbody className="divide-y divide-white/10">
                   <tr>
-                    <td className="py-3 text-gray-400">Market Cap</td>
-                    <td className="py-3 text-right text-white font-semibold">
+                    <td className="py-2 text-gray-400">Market Cap</td>
+                    <td className="py-2 text-right font-semibold">
                       {formatNumber(data.market_data.market_cap.usd)}
                     </td>
                   </tr>
                   <tr>
-                    <td className="py-3 text-gray-400">24h Volume</td>
-                    <td className="py-3 text-right text-white font-semibold">
+                    <td className="py-2 text-gray-400">24h Volume</td>
+                    <td className="py-2 text-right font-semibold">
                       {formatNumber(data.market_data.total_volume.usd)}
                     </td>
                   </tr>
                   <tr>
-                    <td className="py-3 text-gray-400">24h High</td>
-                    <td className="py-3 text-right text-green-400 font-semibold">
+                    <td className="py-2 text-gray-400">24h High</td>
+                    <td className="py-2 text-right text-green-400 font-semibold">
                       ${data.market_data.high_24h.usd.toLocaleString()}
                     </td>
                   </tr>
                   <tr>
-                    <td className="py-3 text-gray-400">24h Low</td>
-                    <td className="py-3 text-right text-red-400 font-semibold">
+                    <td className="py-2 text-gray-400">24h Low</td>
+                    <td className="py-2 text-right text-red-400 font-semibold">
                       ${data.market_data.low_24h.usd.toLocaleString()}
                     </td>
                   </tr>
                   <tr>
-                    <td className="py-3 text-gray-400">Circulating Supply</td>
-                    <td className="py-3 text-right text-white font-semibold">
+                    <td className="py-2 text-gray-400">Circulating Supply</td>
+                    <td className="py-2 text-right font-semibold">
                       {data.market_data.circulating_supply.toLocaleString()}{" "}
                       {data.symbol.toUpperCase()}
                     </td>
                   </tr>
                   <tr>
-                    <td className="py-3 text-gray-400">Max Supply</td>
-                    <td className="py-3 text-right text-white font-semibold">
+                    <td className="py-2 text-gray-400">Max Supply</td>
+                    <td className="py-2 text-right font-semibold">
                       {data.market_data.max_supply
                         ? data.market_data.max_supply.toLocaleString()
                         : "∞"}{" "}
@@ -260,19 +252,23 @@ export default function CryptoDetailPage() {
             </div>
           </div>
 
-          <div className="lg:col-span-2 bg-[#1a1c35] rounded-3xl p-6">
-            <h3 className="text-xl font-semibold mb-4">About {data.name}</h3>
+          {/* About Section */}
+          <div className="lg:col-span-2 bg-[#1a1c35] rounded-3xl p-4 sm:p-6">
+            <h3 className="text-lg sm:text-xl font-semibold mb-4">
+              About {data.name}
+            </h3>
             <div
-              className="text-gray-300 leading-relaxed space-y-4"
-              dangerouslySetInnerHTML={{
-                __html: data.description.en,
-              }}
+              className="text-sm sm:text-base text-gray-300 leading-relaxed space-y-4 max-h-[400px] overflow-y-auto"
+              dangerouslySetInnerHTML={{ __html: data.description.en }}
             />
           </div>
 
-          <div className="bg-[#1a1c35] rounded-3xl p-6">
-            <h3 className="text-xl font-semibold mb-4">Links & Resources</h3>
-            <div className="space-y-4">
+          {/* Links Section */}
+          <div className="bg-[#1a1c35] rounded-3xl p-4 sm:p-6">
+            <h3 className="text-lg sm:text-xl font-semibold mb-4">
+              Links & Resources
+            </h3>
+            <div className="space-y-3">
               {data.links?.homepage?.[0] && (
                 <a
                   href={data.links.homepage[0]}

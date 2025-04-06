@@ -22,29 +22,17 @@ export default function CryptoRow() {
   }
 
   return (
-    <div className="relative">
-      <div className="overflow-x-auto overflow-y-hidden hide-scrollbar">
-        <div className="inline-flex gap-6 p-6 min-w-full">
-          {data.map((coin, index) => (
-            <CryptoCard
-              key={coin.id}
-              coin={coin}
-              index={index}
-              price={prices[coin.id]}
-            />
-          ))}
-        </div>
+    <div className="relative px-4 sm:px-6 lg:px-8 py-6">
+      <div className="flex flex-wrap justify-center gap-6">
+        {data.map((coin, index) => (
+          <CryptoCard
+            key={coin.id}
+            coin={coin}
+            index={index}
+            price={prices[coin.id]}
+          />
+        ))}
       </div>
-
-      <style jsx>{`
-        .hide-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-        .hide-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
     </div>
   );
 }

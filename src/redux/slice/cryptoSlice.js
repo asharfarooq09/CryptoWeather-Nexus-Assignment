@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { fetchCryptos } from '../../utils/api'
 
-export const getCryptos = createAsyncThunk('crypto/getCryptos', async (city) => {
+export const getCryptos = createAsyncThunk('crypto/getCryptos', async () => {
   return await fetchCryptos()
 })
 

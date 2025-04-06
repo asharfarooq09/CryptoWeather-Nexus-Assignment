@@ -150,126 +150,138 @@ export default function WeatherDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f1123] text-white px-4 py-8">
-      <div className="max-w-[1920px] mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-4">
-            <div className="w-20 h-20 flex items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 text-5xl">
-              {weatherIcon}
-            </div>
-            <div>
-              <div className="flex items-center gap-3">
-                <h1 className="text-4xl font-bold text-white">
-                  {city.charAt(0).toUpperCase() + city.slice(1).toLowerCase()}
-                </h1>
-                <button
-                  onClick={() => toggleCity(city)}
-                  className="text-3xl transition-all duration-300 hover:scale-110 focus:outline-none"
-                >
-                  {isCityFavorite(city) ? (
-                    <span className="text-yellow-400">★</span>
-                  ) : (
-                    <span className="text-gray-400 hover:text-yellow-400">
-                      ☆
-                    </span>
-                  )}
-                </button>
-              </div>
-              <div className="flex items-center gap-2 mt-2">
-                <span className="text-sm font-medium text-gray-400 bg-white/5 px-2 py-1 rounded-md">
-                  {weatherData.weather?.[0]?.main}
-                </span>
-                <span className="text-sm font-medium text-gray-400">
-                  Last updated: {new Date().toLocaleTimeString()}
-                </span>
-              </div>
-            </div>
-          </div>
-          <div className="text-right">
-            <div className={`text-6xl font-bold ${tempColor}`}>{temp}°C</div>
-            <div className="text-gray-400 mt-2">
-              Feels like {weatherData.main?.feels_like}°C
-            </div>
-          </div>
+    <div className="min-h-screen bg-[#0f1123] text-white px-4 py-6">
+  <div className="max-w-7xl mx-auto space-y-8">
+    {/* Header */}
+    <div className="flex flex-col sm:flex-row items-center sm:items-start justify-between gap-6">
+      <div className="flex items-center gap-4">
+        <div className="w-20 h-20 flex items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 text-5xl">
+          {weatherIcon}
         </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 bg-[#1a1c35] rounded-3xl p-6">
-            <h3 className="text-xl font-semibold mb-4">Temperature Trend</h3>
-            <div className="h-[300px]">
-              <Line data={chartData} options={chartOptions} />
-            </div>
+        <div className="text-center sm:text-left">
+          <div className="flex items-center justify-center sm:justify-start gap-3">
+            <h1 className="text-3xl sm:text-4xl font-bold text-white">
+              {city.charAt(0).toUpperCase() + city.slice(1).toLowerCase()}
+            </h1>
+            <button
+              onClick={() => toggleCity(city)}
+              className="text-2xl transition-all duration-300 hover:scale-110 focus:outline-none"
+            >
+              {isCityFavorite(city) ? (
+                <span className="text-yellow-400">★</span>
+              ) : (
+                <span className="text-gray-400 hover:text-yellow-400">☆</span>
+              )}
+            </button>
           </div>
-
-          <div className="bg-[#1a1c35] rounded-3xl p-6">
-            <h3 className="text-xl font-semibold mb-4">Weather Details</h3>
-            <div className="space-y-6">
-              <table className="w-full">
-                <tbody className="divide-y divide-white/10">
-                  <tr>
-                    <td className="py-3 text-gray-400">Humidity</td>
-                    <td className="py-3 text-right text-white font-semibold">
-                      {weatherData.main?.humidity}%
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="py-3 text-gray-400">Wind Speed</td>
-                    <td className="py-3 text-right text-white font-semibold">
-                      {weatherData.wind?.speed} m/s
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="py-3 text-gray-400">Wind Direction</td>
-                    <td className="py-3 text-right text-white font-semibold">
-                      {getWindDirection(weatherData.wind?.deg)}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="py-3 text-gray-400">Pressure</td>
-                    <td className="py-3 text-right text-white font-semibold">
-                      {weatherData.main?.pressure} hPa
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="py-3 text-gray-400">Visibility</td>
-                    <td className="py-3 text-right text-white font-semibold">
-                      {(weatherData.visibility / 1000).toFixed(1)} km
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="py-3 text-gray-400">Cloud Cover</td>
-                    <td className="py-3 text-right text-white font-semibold">
-                      {weatherData.clouds?.all}%
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div className="lg:col-span-3 bg-[#1a1c35] rounded-3xl p-6">
-            <h3 className="text-xl font-semibold mb-4">3-Hour Forecast</h3>
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
-              {[...Array(8)].map((_, i) => (
-                <div
-                  key={i}
-                  className="bg-white/5 rounded-xl p-4 text-center backdrop-blur-sm"
-                >
-                  <div className="text-sm text-gray-400">
-                    {chartData.labels[i]}
-                  </div>
-                  <div className="text-2xl my-2">
-                    {getWeatherIcon(weatherData.weather?.[0]?.main)}
-                  </div>
-                  <div className="text-lg font-semibold">
-                    {chartData.datasets[0].data[i]}°C
-                  </div>
-                </div>
-              ))}
-            </div>
+          <div className="flex flex-wrap justify-center sm:justify-start gap-2 mt-2">
+            <span className="text-xs font-medium text-gray-400 bg-white/5 px-2 py-1 rounded-md">
+              {weatherData.weather?.[0]?.main}
+            </span>
+            <span className="text-xs font-medium text-gray-400">
+              Last updated: {new Date().toLocaleTimeString()}
+            </span>
           </div>
         </div>
       </div>
+      <div className="text-center sm:text-right">
+        <div className={`text-5xl sm:text-6xl font-bold ${tempColor}`}>
+          {temp}°C
+        </div>
+        <div className="text-gray-400 mt-1 text-sm sm:text-base">
+          Feels like {weatherData.main?.feels_like}°C
+        </div>
+      </div>
     </div>
+
+    {/* Chart + Details */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Chart */}
+      <div className="md:col-span-2 bg-[#1a1c35] rounded-3xl p-4 sm:p-6">
+        <h3 className="text-lg sm:text-xl font-semibold mb-4">
+          Temperature Trend
+        </h3>
+        <div className="h-[250px] sm:h-[300px]">
+          <Line data={chartData} options={chartOptions} />
+        </div>
+      </div>
+
+      {/* Weather Details */}
+      <div className="bg-[#1a1c35] rounded-3xl p-4 sm:p-6">
+        <h3 className="text-lg sm:text-xl font-semibold mb-4">
+          Weather Details
+        </h3>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <tbody className="divide-y divide-white/10">
+              <tr>
+                <td className="py-3 text-gray-400">Humidity</td>
+                <td className="py-3 text-right font-semibold">
+                  {weatherData.main?.humidity}%
+                </td>
+              </tr>
+              <tr>
+                <td className="py-3 text-gray-400">Wind Speed</td>
+                <td className="py-3 text-right font-semibold">
+                  {weatherData.wind?.speed} m/s
+                </td>
+              </tr>
+              <tr>
+                <td className="py-3 text-gray-400">Wind Direction</td>
+                <td className="py-3 text-right font-semibold">
+                  {getWindDirection(weatherData.wind?.deg)}
+                </td>
+              </tr>
+              <tr>
+                <td className="py-3 text-gray-400">Pressure</td>
+                <td className="py-3 text-right font-semibold">
+                  {weatherData.main?.pressure} hPa
+                </td>
+              </tr>
+              <tr>
+                <td className="py-3 text-gray-400">Visibility</td>
+                <td className="py-3 text-right font-semibold">
+                  {(weatherData.visibility / 1000).toFixed(1)} km
+                </td>
+              </tr>
+              <tr>
+                <td className="py-3 text-gray-400">Cloud Cover</td>
+                <td className="py-3 text-right font-semibold">
+                  {weatherData.clouds?.all}%
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    {/* 3 Hour Forecast */}
+    <div className="bg-[#1a1c35] rounded-3xl p-4 sm:p-6">
+      <h3 className="text-lg sm:text-xl font-semibold mb-4">
+        3-Hour Forecast
+      </h3>
+      <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
+        {[...Array(8)].map((_, i) => (
+          <div
+            key={i}
+            className="bg-white/5 rounded-xl p-3 sm:p-4 text-center backdrop-blur-sm"
+          >
+            <div className="text-xs sm:text-sm text-gray-400">
+              {chartData.labels[i]}
+            </div>
+            <div className="text-xl sm:text-2xl my-1 sm:my-2">
+              {getWeatherIcon(weatherData.weather?.[0]?.main)}
+            </div>
+            <div className="text-base sm:text-lg font-semibold">
+              {chartData.datasets[0].data[i]}°C
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
+
   );
 }
